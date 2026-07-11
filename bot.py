@@ -17,17 +17,14 @@ def webhook():
         if data and "message" in data:
             chat_id = data["message"]["chat"]["id"]
             text = data["message"].get("text", "")
-            
-            # ارسال پاسخ
             url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
             payload = {"chat_id": chat_id, "text": f"📩 دریافت شد: {text}"}
             requests.post(url, json=payload)
-            
         return "OK", 200
     except Exception as e:
         print("Error:", e)
         return "OK", 200
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
