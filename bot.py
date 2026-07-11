@@ -10,15 +10,15 @@ TOKEN = os.environ.get("BOT_TOKEN")
 def home():
     return "AmirAI Bot is alive!"
 
-@app.route("/" + TOKEN, methods=["POST"])
+@app.route("/webhook", methods=["POST"])
 def webhook():
     try:
         data = request.get_json()
         if data and "message" in data:
             chat_id = data["message"]["chat"]["id"]
             text = data["message"].get("text", "")
-            url = "https://api.telegram.org/bot" + TOKEN + "/sendMessage"
-            payload = {"chat_id": chat_id, "text": "📩 دریافت شد: " + text}
+            url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+            payload = {"chat_id": chat_id, "text": f"📩 دریافت شد: {text}"}
             requests.post(url, json=payload)
         return "OK", 200
     except Exception as e:
