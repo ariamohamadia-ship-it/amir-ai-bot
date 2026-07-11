@@ -1,6 +1,6 @@
 import os
-import requests
 from flask import Flask, request
+import requests
 
 app = Flask(__name__)
 
@@ -18,16 +18,13 @@ def webhook():
             chat_id = data["message"]["chat"]["id"]
             text = data["message"].get("text", "")
             
-            url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-            payload = {
-                "chat_id": chat_id,
-                "text": f"📩 پیام شما دریافت شد:\n\n{text}"
-            }
-            requests.post(url, json=payload)
-            
+            requests.post(
+                f"https://api.telegram.org/bot{TOKEN}/sendMessage",
+                json={"chat_id": chat_id, "text": f"📩 دریافت شد: {text}"}
+            )
         return "OK", 200
     except Exception as e:
-        print(f"خطا: {e}")
+        print("Error:", e)
         return "OK", 200
 
 if __name__ == "__main__":
